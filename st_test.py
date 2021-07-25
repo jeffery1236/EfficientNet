@@ -7,7 +7,7 @@ from efficientnet_pytorch import EfficientNet
 import numpy as np
 import torch
 from torchvision import models, transforms
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def fetch(url: str):
     import requests, os, hashlib, tempfile
