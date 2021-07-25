@@ -6,7 +6,8 @@ from PIL import Image
 from efficientnet_pytorch import EfficientNet
 import numpy as np
 import torch
-# import matplotlib.pyplot as plt
+from torchvision import models, transforms
+import matplotlib.pyplot as plt
 
 def fetch(url: str):
     import requests, os, hashlib, tempfile
@@ -47,7 +48,7 @@ def preprocess_img(img) -> torch.tensor:
 
 st.markdown("# Whats that thing in the picture? &nbsp ")
 
-img_url = st.text_input("Enter image url:", 'https://pbs.twimg.com/media/Ex-jDSEW8AU_87u.jpg')
+img_url = st.text_input("Enter image url:", 'https://i.natgeofe.com/n/e66e93af-1ad0-4201-8641-ef384108536a/orca.jpg')
 if not img_url.startswith('http'):
     st.text('Invalid image url')
 
@@ -55,12 +56,19 @@ img = Image.open(io.BytesIO(fetch(img_url))) # read fetched content into bytes s
 st.image(img)
 # img.show()
 
-arr = np.array(img, dtype=np.float32)
+model_name = 'efficientnet-b0'
+model = EfficientNet.from_pretrained(model_name)
+img_size = model.get_image_size(model_name)
+# model = models.resnet18()
 
-processed_arr = preprocess_img(img)
-print(processed_arr.size())
+# arr = np.array(img)
+transforms = transforms.Compose([transforms.Resize(img_size), transforms.CenterCrop(img_size),
+                                 transforms.ToTensor(),
+                                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+processed_arr = transforms(img).unsqueeze(0)
+# processed_arr = preprocess_img(img)
 
-model = EfficientNet.from_pretrained('efficientnet-b0')
+model.eval()
 logits = model(processed_arr)
 top5 = torch.topk(logits, k=5).indices.squeeze(0).tolist() # get top5 label ids
 
