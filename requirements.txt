@@ -2,7 +2,7 @@ jsonschema==3.2.0
 streamlit==0.85.0
 efficientnet-pytorch==0.7.1
 torch==1.9.0
-torchvision==1.9.0
+torchvision==0.10.0
 numpy==1.20.2
 Pillow==8.2.0
 requests==2.25.1
