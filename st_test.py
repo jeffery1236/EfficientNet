@@ -46,7 +46,9 @@ def preprocess_img(img) -> torch.tensor:
     return torch.tensor(arr, dtype=torch.float32)
 
 
-st.markdown("# Whats that thing in the picture? &nbsp ")
+st.markdown("# Whats that thing in the picture? &nbsp")
+st.markdown('We will use the EfficientNet Convolutional Neural Network to find out!')
+st.text('')
 
 img_url = st.text_input("Enter image url:", 'https://i.natgeofe.com/n/e66e93af-1ad0-4201-8641-ef384108536a/orca.jpg')
 if not img_url.startswith('http'):
